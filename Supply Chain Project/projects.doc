@@ -1,0 +1,80 @@
+learning the use of use case diagrams
+PROBLEMS
+DICUSSION ON COVID 19 VACCINE
+FAKE VACCINE APPROVAL
+VALID AND ORIGINAL CERTIFICATE 
+
+USE CASE , SYSTEM DESIGN
+
+BLOCK CHAIN SUPPLY CHAIN POC : COVID -19 VACCINE PASSPORTS
+TO BE ABLE TO SOLVE THE PROBLEM OF TRUST
+REQUIRMRNTS
+ VACCINE COLD CHAIN
+  MANUFACTURE => NATIONAL STORAGE FACILITY => REGIONAL HOSPITAL => HEALTH CENTER => VACCATION OUTREACH
+  ALSO DEPENDS ON THE ENVIROMENTS
+  MAUFACTURE
+  DISTRUBUTOR
+    INSPECTOR
+    STORAGE FACLITIY
+    IMMUNALIZER (DOCTCOR,)
+    TRAVELLER
+    BORDER AGENT   ( VERIFITY  THE VACCCINE PASSPORT)
+
+    PROBLEMS                             AFFECTED ACTOR      SOLUTION
+    VACCINE PASSPORT CAN BE FACIFIED - BORDER AGENT  -  CRYPTOGRAPHICALLY VERIFY USING ON-CHAIN DATA
+    KEY FACLITTIES MAY                                    PUBLISH THE INSPECTION RESULTS  TO BLOCKCHAIN
+    NOT MEET QUALITY STANDARDS       -  ALL          -      VERIFITY PRESENTED INSPECTION RESULTS
+    VACCINE PASSPORT MAY NOT BE
+  RECONGIZED BY DESTINATION         -   DISTRUBUTOR            VERIFY SIGNATURES IN PRESENTED PASSPORT, CERTIFACTES
+       COUNTRIES                        TRAVELLER
+                                       IMMUNZERS
+
+ TAMPER PROOF
+
+ ISSUER - I CAN USE A SIGNATURE REPRESENTING  A DIGITAL CERTIFICATE FOR A  MANUFACTUER'S PLANT  OR STORAGE FACILITY
+ PROVER  I CAN PRESENT  A CERTIFICATE  / SIGNATURE  ISSUED  TO ME
+ VERIFIER  ICAN VERIFY / VALIDATE THE SIGNATURE ON THE BLOCKCHAIN FOR A VACCINE
+  YOU CAN USE DOC GOOGLE FOR YOU PROJECTS
+  USING REMIX.IDE
+
+  SOLDITY  PROGRAMMING LANGUAGE
+  DEFINE THE COMPLIER VERSION
+  bytes - data type
+  memeory - it will keep
+  internal we are keeping it inside the scope
+  pure - it does not change the state 
+(uint8 v , bytes32 r , bytes32 s ) - output  arg
+ assembly {
+           // we use it to get the fitst bytes32
+            r:= mload(add(sig,32))
+
+        }   you are assesing the vitual machine which provide easy assess to the BLOCKCHAIN to make some
+        low level changes
+         erecover is a default method
+
+
+         
+
+         // ALL DETAILS A BEEN LABELLED HERE AS IT FOLLOWS
+         library CryptoSuite {
+      function splitSignature(bytes memory sig) internal pure returns(uint8 v , bytes32 r , bytes32 s){
+        require(sig.lenght == 65);
+
+        assembly {
+             // we use it to get the first bytes32
+            r:= mload(add(sig,32))
+                // we get the next bytes 32
+            s:= mload(add(sig, 64))
+
+            v:= byte(0 , mload(add(sig , 96)))
+
+        }
+        return ( v , r ,s);
+      }
+      // this function will call the split signature
+       function  recoverSigner(byte32 message , byte memory sig)  internal pure returns (address){
+        uint8 v , bytes32 r , bytes32 s  = splitSignature(sig);
+                 // it will then return a new time
+                return ecrecover(message, v, r, s);
+       }
+}
